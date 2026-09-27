@@ -1,6 +1,6 @@
 # Build Output Directories
 bin/
-driver/
+dri/
 
 # Kernel Module Build Artifacts
 *.o

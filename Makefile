@@ -23,8 +23,8 @@ all: $(TOOL_EXE)
 	@echo "=== Building Kernel Module ==="
 	$(MAKE) -C $(KDIR) M=$(PWD) modules
 	@echo "=== Moving Module to Destination ==="
-	@mkdir -p driver
-	@mv devu.ko driver/devu 2>/dev/null || mv src/driver/devu.ko driver/devu 2>/dev/null || true
+	@mkdir -p dri
+	@mv devu.ko dri/devu 2>/dev/null || mv src/driver/devu.ko dri/devu 2>/dev/null || true
 
 $(TOOL_EXE): $(TOOL_SRCS)
 	@echo "=== Building User Space Tool ==="
@@ -40,4 +40,5 @@ install: all
 clean:
 	@echo "=== Cleaning Build Artifacts ==="
 	$(MAKE) -C $(KDIR) M=$(PWD) clean
-	rm -rf bin/ driver/
+	rm -rf bin/ dri/
+	find src/ -name '*.o' -o -name '*.ko' -o -name '.*.cmd' -o -name '*.mod.c' -o -name '*.mod' -exec rm -f {} +
