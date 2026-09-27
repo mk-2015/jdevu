@@ -1,0 +1,24 @@
+# Build Output Directories
+bin/
+driver/
+
+# Kernel Module Build Artifacts
+*.o
+*.ko
+*.mod
+*.mod.c
+*.order
+Module.symvers
+
+# Kbuild Hidden Temporary Files
+.*.cmd
+.*.o.d
+.tmp_versions/
+
+# Logs and Diagnostics
+driver-log.json
+
+# IDEs and OS Metadata
+.vscode/
+.idea/
+.DS_Store
