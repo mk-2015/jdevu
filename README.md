@@ -9,5 +9,4 @@
 
 ## Documentation Index
 
-- [Tool Info](docs/tool/tool.md)
 - [Driver Info](docs/driver/driver.md)
