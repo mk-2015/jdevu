@@ -165,7 +165,7 @@ static long ktrace_ioctl(struct file *file, unsigned int cmd, unsigned long arg)
     count = min_t(__u64, atomic64_read(&session->hit_count), MAX_HITS);
     count = min_t(__u64, count, fetch.num_hits);
     if (copy_to_user(fetch.hits, session->hit_info, count * sizeof(*session->hit_info))) {
-        kfree(temp_hits)
+        kfree(temp_hits);
         return -EFAULT;
     }
 
