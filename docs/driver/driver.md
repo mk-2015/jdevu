@@ -27,7 +27,26 @@ Provides physical memory access.
 Runtime kernel instrumentation using kprobes.
 - **IOCTL**: `KTRACE_FUNC_FILTER` attaches dynamic probes to kernel functions.
 
-### IPC Interface (`/dev/ipchub`)
-Inter-Process Communication Hub.
+### I/O Port Interface (`/dev/unlkport`)
+Raw CPU I/O port access.
 - **Type**: `miscdevice`
-- **Purpose**: Provides a high-speed, kernel-resident communication channel between processes.
+- **IOCTL**:
+  - `PORT_CMD_PORT_READ`/`WRITE`: Read/Write a byte/word/long from a port.
+  - `PORT_CMD_BLOCK_READ`/`WRITE`: Read/Write blocks of data using `ins`/`outs` instructions.
+- **Purpose**: Provides root-level access to CPU I/O ports for hardware debugging.
+
+### PCI Descriptor Interface (`/dev/kpcidescv`)
+PCI device inspection.
+- **Type**: `miscdevice`
+- **IOCTL**:
+  - `PCIDEVC_GET_SIZE`: Get number of PCI devices.
+  - `PCIDEVC_GET_DEVICES`: Fetch array of device names and base addresses.
+- **Purpose**: Inspects system PCI device topology and resources.
+
+### USB Descriptor Interface (`/dev/kusbdescv`)
+USB device inspection.
+- **Type**: `miscdevice`
+- **IOCTL**:
+  - `USBDEVC_GET_SIZE`: Get number of USB devices.
+  - `USBDEVC_GET_DEVICES`: Fetch array of device IDs and locations.
+- **Purpose**: Inspects system USB device topology.

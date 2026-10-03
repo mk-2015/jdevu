@@ -1,7 +1,6 @@
 #include <devu/sys.h>
 #include <devu/funcdecl.h>
 #include <devu/devfs.h>
-#include <devu/ipchub.h>
 
 static struct class *cmem_cls;
 
@@ -26,13 +25,17 @@ int setup_sys(struct class **cls, struct devu_driver **drv) {
     setup_call(*drv);
     setup_unlockedmem(cmem_cls, (*drv)->major);
     setup_ktraces();
-    setup_ipchub();
+    setup_unlkport();
+    setup_kpcidescv();
+    setup_kusbdescv();
     return 0;
 }
 
 void unsetup_sys(struct class *cls, struct devu_driver *drv) {
     if (drv) {
-        unsetup_ipchub();
+        unsetup_kusbdescv();
+        unsetup_kpcidescv();
+        unsetup_unlkport();
         unsetup_ktraces();
         unsetup_unlockedmem(cmem_cls, drv->major);
         free_driver(drv);
