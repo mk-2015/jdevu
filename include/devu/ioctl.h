@@ -17,9 +17,14 @@ typedef int8_t __s8;
 typedef uint8_t __u8;
 #endif
 
+#define DEVU_MEM_CACHED      0
+#define DEVU_MEM_NONCACHED   1
+#define DEVU_MEM_WRITECOMBINE 2
+
 typedef struct {
     __u64 lower_phys_addr;
     __u64 upper_phys_addr;
+    __u32 mem_type;
 } __attribute__((packed)) mem_t;
 
 typedef struct {

@@ -17,6 +17,7 @@ static int mem_open(struct inode *inode, struct file *file) {
     
     region->lower_phys_addr = 0;
     region->upper_phys_addr = 0;
+    region->mem_type = DEVU_MEM_NONCACHED; // Default to safe
     
     file->private_data = region;
     return 0;
@@ -34,8 +35,8 @@ static long mem_ioctl(struct file *file, unsigned int cmd, unsigned long arg) {
     if (cmd == DEVU_MEM_RESIZE) {
         if (copy_from_user(region, user_region, sizeof(mem_t)))
             return -EFAULT;
-        printk(KERN_INFO "devu: Memory region set to 0x%llx - 0x%llx\n", 
-               region->lower_phys_addr, region->upper_phys_addr);
+        printk(KERN_INFO "devu: Memory region set to 0x%llx - 0x%llx, type: %d\n", 
+               region->lower_phys_addr, region->upper_phys_addr, region->mem_type);
         return 0;
     }
     return -EINVAL;
@@ -76,7 +77,19 @@ static int mem_mmap(struct file *file, struct vm_area_struct *vma) {
     if (offset + size > (region->upper_phys_addr - region->lower_phys_addr))
         return -EINVAL;
 
-    vma->vm_page_prot = pgprot_noncached(vma->vm_page_prot);
+    // Apply caching policy
+    switch (region->mem_type) {
+        case DEVU_MEM_NONCACHED:
+            vma->vm_page_prot = pgprot_noncached(vma->vm_page_prot);
+            break;
+        case DEVU_MEM_WRITECOMBINE:
+            vma->vm_page_prot = pgprot_writecombine(vma->vm_page_prot);
+            break;
+        case DEVU_MEM_CACHED:
+        default:
+            // Standard caching (do nothing)
+            break;
+    }
 
     if (remap_pfn_range(vma, vma->vm_start,
                         (region->lower_phys_addr + offset) >> PAGE_SHIFT,
